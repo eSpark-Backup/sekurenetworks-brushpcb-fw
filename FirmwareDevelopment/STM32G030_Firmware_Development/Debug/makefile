@@ -9,6 +9,10 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
 -include Drivers/STM32G0xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -60,8 +64,8 @@ all: main-build
 main-build: Firmware_Development.elf secondary-outputs
 
 # Tool invocations
-Firmware_Development.elf Firmware_Development.map: $(OBJS) $(USER_OBJS) C:\Users\Windows\Desktop\STM32G030_Firmware_Development\STM32G030F6PX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Firmware_Development.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Windows\Desktop\STM32G030_Firmware_Development\STM32G030F6PX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_Development.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Firmware_Development.elf Firmware_Development.map: $(OBJS) $(USER_OBJS) C:\Users\Windows\Documents\Github\sekurenetworks-brushpcb-fw\FirmwareDevelopment\STM32G030_Firmware_Development\STM32G030F6PX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Firmware_Development.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Windows\Documents\Github\sekurenetworks-brushpcb-fw\FirmwareDevelopment\STM32G030_Firmware_Development\STM32G030F6PX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Firmware_Development.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
