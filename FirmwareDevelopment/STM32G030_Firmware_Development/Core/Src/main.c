@@ -54,6 +54,7 @@ void ButtonStartTask(void const * argument);
 /* USER CODE BEGIN PFP */
 
 uint32_t last_toggle_time = 0;
+uint32_t last_toggle_time_1 = 0;
 const uint32_t toggle_interval = 500; // 500 ms interval
 volatile uint8_t operation_started = 0;
 volatile uint32_t button_press_time = 0;
@@ -154,10 +155,10 @@ void motor_operation(void)
 
     if (operation_started) //operation starts when PA0 is pressed for short time less than 5sec
     {
-        if (current_time  >= auto_shut_off_duration) // autoshutdown operation after 30 seconds
+        if ((current_time - last_toggle_time_1)  >= auto_shut_off_duration) // autoshutdown operation after 30 seconds
         {
             operation_started = 0;
-            HAL_GPIO_WritePin(GPIOA, motor_con_pin, GPIO_PIN_RESET); // Turn off operation
+            HAL_GPIO_WritePin(GPIOA, motor_con_pin, GPIO_PIN_SET); // Turn off operation
         }
         else if ((current_time - last_toggle_time) >= toggle_interval) // checking the interval and toggle accordingly
         {
@@ -173,7 +174,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) // set for short and long press (
 {
     if (GPIO_Pin == sw_pin)
     {
-    	operation_started = 1;
+    	if (!operation_started)
+    	{
+			operation_started = 1;
+			last_toggle_time_1 = HAL_GetTick();
+    	}
     }
 }
 
